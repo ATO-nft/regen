@@ -13,6 +13,9 @@ import './ToColor.sol';
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
+/// @title contract for NFT Generative Art
+/// @author Olivier Fernandez / Frédéric Le Coidic
+
 contract Loogies is ERC721Enumerable, Ownable {
 
   using Strings for uint256;
@@ -93,24 +96,37 @@ contract Loogies is ERC721Enumerable, Ownable {
   }
 
   // Visibility is `public` to enable it being called by other contracts for composition.
+  //'.rotate {animation: logoRot 5s linear 1s infinite; transform-origin: 50% 50%;} @keyframes logoRot { 0% {transform: rotateY(0deg);} 50% {transform: rotateY(360deg);} 100% {transform: rotateY(0deg);} }',
+  // vers la droite
+  //'.rotate {animation: logoRot 4s linear infinite; transform-origin: 50% 50%;} @keyframes logoRot { 0% {transform: translate(0em,0);} 50% {transform: translate(5em,0);} 100% {transform: translate(0em,0);} }',
+  //'.rotate {animation: logoRot 4s linear infinite; transform-origin: 50% 50%;} @keyframes logoRot { 0% {transform: translate(0,0);} 50% {transform: translate(100px,0);} 100% {transform: translate(0,0);} }',
+  // vers bas
+  //'.rotate {animation: logoRot 4s linear infinite; transform-origin: 50% 50%;} @keyframes logoRot { 0% {transform: translate(0,0);} 50% {transform: translate(0,100px);} 100% {transform: translate(0,0);} }',
   function renderTokenById(uint256 id) public view returns (string memory) {
     string memory render = string(abi.encodePacked(
+      '<style type="text/css">',
+        '.rotate {animation: logoJump 2s infinite; transform-origin: 50% 50%;}',
+        ' @keyframes logoJump { 0% {transform: translate(0,0);} 25% {transform: translate(0,100px);} 50% {transform: translate(0,0);}',
+        '75% {transform: rotateY(0deg);} 100% {transform: rotateY(360deg);} }',
+      '</style>',
+      '<g class="rotate">',
       '<g id="eye1">',
           '<ellipse stroke-width="3" ry="29.5" rx="29.5" id="svg_1" cy="154.5" cx="181.5" stroke="#000" fill="#fff"/>',
           '<ellipse ry="3.5" rx="2.5" id="svg_3" cy="154.5" cx="173.5" stroke-width="3" stroke="#000" fill="#000000"/>',
-        '</g>',
-        '<g id="head">',
+      '</g>',
+      '<g id="head">',
           '<ellipse fill="#',
           color[id].toColor(),
           '" stroke-width="3" cx="204.5" cy="211.80065" id="svg_5" rx="',
           chubbiness[id].toString(),
           '" ry="51.80065" stroke="#000"/>',
-        '</g>',
-        '<g id="eye2">',
+      '</g>',
+      '<g id="eye2">',
           '<ellipse stroke-width="3" ry="29.5" rx="29.5" id="svg_2" cy="168.5" cx="209.5" stroke="#000" fill="#fff"/>',
           '<ellipse ry="3.5" rx="3" id="svg_4" cy="169.5" cx="208" stroke-width="3" fill="#000000" stroke="#000"/>',
-        '</g>'
-      ));
+      '</g>',
+      '</g>'
+    ));
 
     return render;
   }
