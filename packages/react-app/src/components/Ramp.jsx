@@ -56,9 +56,7 @@ export default function Ramp(props) {
       <Button
         size="large"
         shape="round"
-        onClick={() => {
-          setModalUp("up");
-        }}
+
       >
         <DollarCircleOutlined style={{ color: "#52c41a" }} />{" "}
         {typeof props.price === "undefined" ? 0 : props.price.toFixed(2)}

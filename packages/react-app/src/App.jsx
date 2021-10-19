@@ -1,3 +1,4 @@
+
 import WalletConnectProvider from "@walletconnect/web3-provider";
 //import Torus from "@toruslabs/torus-embed"
 import WalletLink from "walletlink";
@@ -7,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header , Ramp, ThemeSwitch } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -254,7 +255,7 @@ function App(props) {
 
   const loogieTankTransferEvents = useEventListener(readContracts, "LoogieTank", "Transfer", localProvider, 1);
   console.log("📟 Loogie Tank Transfer events:", loogieTankTransferEvents);
- 
+
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
   //
@@ -273,7 +274,7 @@ function App(props) {
         console.log("tokenId", tokenId);
         const tokenURI = await readContracts.LoogieTank.tokenURI(tokenId);
         console.log("tokenURI", tokenURI);
-        const jsonManifestString = atob(tokenURI.substring(29))
+        const jsonManifestString = atob(tokenURI.substring(29));
         console.log("jsonManifestString", jsonManifestString);
 
         try {
@@ -283,7 +284,6 @@ function App(props) {
         } catch (e) {
           console.log(e);
         }
-
       } catch (e) {
         console.log(e);
       }
@@ -301,9 +301,9 @@ function App(props) {
           console.log("tokenId", tokenId);
           const tokenURI = await readContracts.Loogies.tokenURI(tokenId);
           console.log("tokenURI", tokenURI);
-          const jsonManifestString = atob(tokenURI.substring(29))
+          const jsonManifestString = atob(tokenURI.substring(29));
           console.log("jsonManifestString", jsonManifestString);
-/*
+        /*
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
           const jsonManifestBuffer = await getFromIPFS(ipfsHash);
@@ -315,7 +315,6 @@ function App(props) {
           } catch (e) {
             console.log(e);
           }
-
         } catch (e) {
           console.log(e);
         }
@@ -536,7 +535,7 @@ function App(props) {
               Loogies
             </Link>
           </Menu.Item>
-          <Menu.Item key="/loogietank">
+          {/* <Menu.Item key="/loogietank">
             <Link
               onClick={() => {
                 setRoute("/loogietank");
@@ -545,7 +544,7 @@ function App(props) {
             >
               Loogie Tank
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/mintloogies">
             <Link
               onClick={() => {
@@ -556,7 +555,7 @@ function App(props) {
               Mint Loogies
             </Link>
           </Menu.Item>
-          <Menu.Item key="/mintloogietank">
+          {/* <Menu.Item key="/mintloogietank">
             <Link
               onClick={() => {
                 setRoute("/mintloogietank");
@@ -565,7 +564,7 @@ function App(props) {
             >
               Mint Loogie Tank
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
 
         <Switch>
@@ -651,7 +650,7 @@ function App(props) {
                         >
                           Transfer
                         </Button>
-                        <br/><br/>
+                        {/* <br/><br/>
                         Transfer to Loogie Tank:{" "}
                         <Address
                           address={readContracts.LoogieTank.address}
@@ -680,7 +679,7 @@ function App(props) {
                             tx(writeContracts.Loogies["safeTransferFrom(address,address,uint256,bytes)"](address, readContracts.LoogieTank.address, id, tankIdInBytes));
                           }}>
                           Transfer
-                        </Button>
+                        </Button> */}
                       </div>
                     </List.Item>
                   );
@@ -791,14 +790,13 @@ function App(props) {
           <Col span={8}>
             <Ramp price={price} address={address} networks={NETWORKS} />
           </Col>
-
           <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
             <GasGauge gasPrice={gasPrice} />
           </Col>
           <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
             <Button
               onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
+                window.open("https://github.com/julienbrg/regen");
               }}
               size="large"
               shape="round"
