@@ -5,7 +5,7 @@ import WalletLink from "walletlink";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
 import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header , Ramp, ThemeSwitch } from "./components";
@@ -46,6 +46,8 @@ const { ethers } = require("ethers");
     You can also bring in contract artifacts in `constants.js`
     (and then use the `useExternalContractLoader()` hook!)
 */
+
+let startApp = true;
 
 /// 📡 What chain are your contracts deployed to?
 const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
@@ -524,6 +526,7 @@ function App(props) {
       <Header />
       {networkDisplay}
       <BrowserRouter>
+        {/*
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
           <Menu.Item key="/">
             <Link
@@ -535,7 +538,7 @@ function App(props) {
               Loogies
             </Link>
           </Menu.Item>
-          {/* <Menu.Item key="/loogietank">
+          <Menu.Item key="/loogietank">
             <Link
               onClick={() => {
                 setRoute("/loogietank");
@@ -544,7 +547,7 @@ function App(props) {
             >
               Loogie Tank
             </Link>
-          </Menu.Item> */}
+          </Menu.Item>
           <Menu.Item key="/mintloogies">
             <Link
               onClick={() => {
@@ -555,7 +558,7 @@ function App(props) {
               Mint Loogies
             </Link>
           </Menu.Item>
-          {/* <Menu.Item key="/mintloogietank">
+          <Menu.Item key="/mintloogietank">
             <Link
               onClick={() => {
                 setRoute("/mintloogietank");
@@ -564,8 +567,8 @@ function App(props) {
             >
               Mint Loogie Tank
             </Link>
-          </Menu.Item> */}
-        </Menu>
+          </Menu.Item>
+        </Menu> */}
 
         <Switch>
           <Route exact path="/">
@@ -584,8 +587,9 @@ function App(props) {
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
             />
+            <Redirect from="/" to="mintloogies"/>
           </Route>
-          <Route exact path="/loogietank">
+          {/* <Route exact path="/loogietank">
             <Contract
               name="LoogieTank"
               signer={userSigner}
@@ -594,17 +598,21 @@ function App(props) {
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
             />
-          </Route>
+          </Route> */}
          <Route exact path="/mintloogies">
+            <div style={{ maxWidth: 820, margin: "auto", paddingBottom: 10 }}>
+              <div className="ListImage" style={{minHeight: 100}}>
+              </div>
+            </div>
             <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <Button type={"primary"} onClick={() => {
                 tx(writeContracts.Loogies.mintItem())
               }}>MINT</Button>
             </div>
             {/* */}
-            <div style={{ width: 820, margin: "auto", paddingBottom: 256 }}>
+            <div style={{ maxWidth: 820, margin: "auto", paddingBottom: 256 }}>
               <List
-                bordered
+                /*bordered*/
                 dataSource={yourLoogies}
                 renderItem={item => {
                   const id = item.id.toNumber();
@@ -612,19 +620,17 @@ function App(props) {
                   console.log("IMAGE",item.image);
 
                   return (
-                    <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-                      <Card
-                        title={
-                          <div>
-                            <span style={{ fontSize: 18, marginRight: 8 }}>{item.name}</span>
-                          </div>
-                        }
-                      >
+                    <div className="ListImage">
+                    <List.Item key={id + "_" + item.uri + "_" + item.owner} className="justify-content-center">
+                      <div>
+                        <div>
+                          <span style={{ fontSize: 18, marginRight: 8 }}>{item.name}</span>
+                        </div>
                         <img src={item.image} />
                         <div>{item.description}</div>
-                      </Card>
+                      </div>
 
-                      <div>
+                      {/* <div>
                         owner:{" "}
                         <Address
                           address={item.owner}
@@ -650,7 +656,7 @@ function App(props) {
                         >
                           Transfer
                         </Button>
-                        {/* <br/><br/>
+                        <br/><br/>
                         Transfer to Loogie Tank:{" "}
                         <Address
                           address={readContracts.LoogieTank.address}
@@ -679,9 +685,10 @@ function App(props) {
                             tx(writeContracts.Loogies["safeTransferFrom(address,address,uint256,bytes)"](address, readContracts.LoogieTank.address, id, tankIdInBytes));
                           }}>
                           Transfer
-                        </Button> */}
-                      </div>
+                        </Button>
+                      </div> */}
                     </List.Item>
+                    </div>
                   );
                 }}
               />
@@ -690,16 +697,15 @@ function App(props) {
 
             
           </Route>
-           <Route exact path="/mintloogietank">
-            <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+           {/* <Route exact path="/mintloogietank"> */}
+            {/*<div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <Button type={"primary"} onClick={() => {
                 tx(writeContracts.LoogieTank.mintItem())
               }}>MINT</Button>
               <Button onClick={() => updateLoogieTanks()}>Refresh</Button>
             </div>
-            {/* */}
 
-            <div style={{ width: 820, margin: "auto", paddingBottom: 256 }}>
+             <div style={{ width: 820, margin: "auto", paddingBottom: 256 }}>
               <List
                 bordered
                 dataSource={yourLoogieTanks}
@@ -759,17 +765,15 @@ function App(props) {
                   );
                 }}
               />
-            </div>
-
-            {/* */}
-          </Route>
+            </div> */}
+         {/*  </Route> */}
         </Switch>
       </BrowserRouter>
 
       <ThemeSwitch />
 
       {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
-      <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+      <div style={{position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
         <Account
           address={address}
           localProvider={localProvider}
