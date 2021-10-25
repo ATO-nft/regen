@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header , Ramp, ThemeSwitch } from "./components";
+import { Account, Address, AddressInput, Contract, Faucet, GasGauge, Header , Ramp, ThemeSwitch, AlegraV3 } from "./components";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -26,6 +26,9 @@ import { useContractConfig } from "./hooks";
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
+
+// svg
+import createSvg from "./components/AlegraV3";
 
 const { ethers } = require("ethers");
 /*
@@ -447,12 +450,17 @@ function App(props) {
         </div>
       );
     }
-  } else {
+  } /*else {
     networkDisplay = (
-      <div style={{ zIndex: -1, position: "absolute", right: 154, top: 28, padding: 16, color: targetNetwork.color }}>
+      <div style={{ right: 154, top: 28, padding: 16, color: targetNetwork.color }}>
         {targetNetwork.name}
       </div>
     );
+  }*/
+
+  const setColor = (numForm) => {
+    // popup color
+    // modif svg pour setColorToForm
   }
 
   const loadWeb3Modal = useCallback(async () => {
@@ -487,8 +495,8 @@ function App(props) {
     setRoute(window.location.pathname);
   }, [setRoute]);
 
-  let faucetHint = "";
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
+  /* let faucetHint = "";
 
   const [faucetClicked, setFaucetClicked] = useState(false);
   if (
@@ -515,7 +523,7 @@ function App(props) {
         </Button>
       </div>
     );
-  }
+  }*/
 
   const [transferToAddresses, setTransferToAddresses] = useState({});
   const [transferToTankId, setTransferToTankId] = useState({});
@@ -523,7 +531,20 @@ function App(props) {
   return (
     <div className="App">
       {/* ✏️ Edit the header and change the title to your project name */}
-      <Header />
+      <Header 
+          address={address}
+          localProvider={localProvider}
+          userSigner={userSigner}
+          mainnetProvider={mainnetProvider}
+          price={price}
+          web3Modal={web3Modal}
+          loadWeb3Modal={loadWeb3Modal}
+          logoutOfWeb3Modal={logoutOfWeb3Modal}
+          blockExplorer={blockExplorer}
+          faucetTx={faucetTx}
+          targetNetworkName={targetNetwork.name}
+          targetNetworkColor={targetNetwork.color}
+          gasPrice={gasPrice}/>
       {networkDisplay}
       <BrowserRouter>
         {/*
@@ -598,19 +619,40 @@ function App(props) {
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
             />
-          </Route> */}
+          </Route> data:image/svg+xml;base64,*/}
          <Route exact path="/mintloogies">
-            <div style={{ maxWidth: 820, margin: "auto", paddingBottom: 10 }}>
+            <div style={{ maxWidth: 400, margin: "auto", paddingBottom: 10 }}>
               <div className="ListImage" style={{minHeight: 100}}>
+                <img src={createSvg()} />
               </div>
             </div>
-            <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+
+            <div style={{ maxWidth: 800, margin: "auto" }}>
+              <Button style={{ marginTop: 10 }} type={"primary"} onClick={() => {
+                setColor(0)
+              }}>Background Color</Button>
+              <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
+                setColor(1)
+              }}>Face Top Color</Button>
+              <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
+                setColor(2)
+              }}>Face Bottom Color</Button>
+              <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
+                setColor(3)
+              }}>Disk Top Color</Button>
+              <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
+                setColor(4)
+              }}>Disk Bottom Color</Button>
+            </div>
+
+
+            <div style={{ maxWidth: 400, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <Button type={"primary"} onClick={() => {
                 tx(writeContracts.Loogies.mintItem())
               }}>MINT</Button>
             </div>
             {/* */}
-            <div style={{ maxWidth: 820, margin: "auto", paddingBottom: 256 }}>
+            <div style={{ maxWidth: 400, margin: "auto", paddingBottom: 256 }}>
               <List
                 /*bordered*/
                 dataSource={yourLoogies}
@@ -773,7 +815,7 @@ function App(props) {
       <ThemeSwitch />
 
       {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
-      <div style={{position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+      {/* <div style={{position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
         <Account
           address={address}
           localProvider={localProvider}
@@ -786,9 +828,10 @@ function App(props) {
           blockExplorer={blockExplorer}
         />
         {faucetHint}
-      </div>
+      </div> */}
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
+      {/*}
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
         <Row align="middle" gutter={[4, 4]}>
           <Col span={8}>
@@ -816,7 +859,6 @@ function App(props) {
         <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
             {
-              /*  if the local provider has a signer, let's show the faucet:  */
               faucetAvailable ? (
                 <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
               ) : (
@@ -826,6 +868,7 @@ function App(props) {
           </Col>
         </Row>
       </div>
+          */}
     </div>
   );
 }
