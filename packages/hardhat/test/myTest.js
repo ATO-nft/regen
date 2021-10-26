@@ -1,26 +1,29 @@
-const { ethers } = require("hardhat");
-const { use, expect } = require("chai");
-const { solidity } = require("ethereum-waffle");
+const { expect } = require("chai");
 
-use(solidity);
+describe("Regen tests", function () {
+  let LoogiesContract;
 
-describe("My Dapp", function () {
-  let myContract;
+  beforeEach(async function () {
+      const Contract = await ethers.getContractFactory("Loogies");
+      LoogiesContract = await Contract.deploy();
+      await LoogiesContract.deployed();
+  });
 
-  describe("YourContract", function () {
-    it("Should deploy YourContract", async function () {
-      const YourContract = await ethers.getContractFactory("YourContract");
+  describe("Loogies Contract", function () {
+  //  it("Should deploy Contract", async function () {
+  //    const Contract = await ethers.getContractFactory("Loogies");
+  //    LoogiesContract = await Contract.deploy();
+      //});
 
-      myContract = await YourContract.deploy();
-    });
-
-    describe("setPurpose()", function () {
-      it("Should be able to set a new purpose", async function () {
-        const newPurpose = "Test Purpose";
-
-        await myContract.setPurpose(newPurpose);
-        expect(await myContract.purpose()).to.equal(newPurpose);
+    describe("Tests", function () {
+      it("Should return the name", async function () {
+        expect(await LoogiesContract.name()).to.equal("Regen");
       });
+  
+      it("Should return the symbol", async function () {
+        expect(await LoogiesContract.symbol()).to.equal("REGEN");
+      });
+  
     });
   });
 });
