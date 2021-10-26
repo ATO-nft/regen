@@ -12,11 +12,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
   });
 
-  const loogieTank = await deploy("LoogieTank",  {
+/*   const loogieTank = await deploy("LoogieTank",  {
     from: deployer,
     args: [loogies.address],
     log: true,
-  });
+  }); */
 
   /*
     // Getting a previously deployed contract
@@ -54,4 +54,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
   */
 };
-module.exports.tags = ["Loogies", "LoogieTank"];
+module.exports.tags = ["Loogies"];

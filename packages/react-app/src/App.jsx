@@ -53,7 +53,7 @@ const { ethers } = require("ethers");
 let startApp = true;
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.velas; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet, velas, ...)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -101,7 +101,7 @@ const walletLinkProvider = walletLink.makeWeb3Provider(`https://mainnet.infura.i
   Web3 modal helps us "connect" external wallets:
 */
 const web3Modal = new Web3Modal({
-  network: "mainnet", // Optional. If using WalletConnect on xDai, change network to "xdai" and add RPC info below for xDai chain.
+  network: "tesnet", // Optional. If using WalletConnect on xDai, change network to "xdai" and add RPC info below for xDai chain.
   cacheProvider: true, // optional
   theme: "light", // optional. Change to "dark" for a dark theme.
   providerOptions: {
@@ -112,8 +112,10 @@ const web3Modal = new Web3Modal({
         infuraId: INFURA_ID,
         rpc: {
           1: `https://mainnet.infura.io/v3/${INFURA_ID}`, // mainnet // For more WalletConnect providers: https://docs.walletconnect.org/quick-start/dapps/web3-provider#required
+          4: `https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161`,
           42: `https://kovan.infura.io/v3/${INFURA_ID}`,
-          100: "https://dai.poa.network", // xDai
+          100: "https://dai.poa.network", // xDai,
+          111: "https://evmexplorer.testnet.velas.com/rpc",
         },
       },
     },
@@ -238,9 +240,9 @@ function App(props) {
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
   // call every 1500 seconds.
-  usePoller(() => {
+/*   usePoller(() => {
     updateLoogieTanks();
-  }, 1500000);
+  }, 1500000); */
 
   // Then read your DAI balance like:
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
@@ -251,15 +253,15 @@ function App(props) {
   const loogieBalance = useContractReader(readContracts, "Loogies", "balanceOf", [address]);
   console.log("🤗 loogie balance:", loogieBalance);
 
-  const loogieTankBalance = useContractReader(readContracts, "LoogieTank", "balanceOf", [address]);
-  console.log("🤗 loogie tank balance:", loogieTankBalance);
+/*   const loogieTankBalance = useContractReader(readContracts, "LoogieTank", "balanceOf", [address]);
+  console.log("🤗 loogie tank balance:", loogieTankBalance); */
 
   // 📟 Listen for broadcast events
   const loogieTransferEvents = useEventListener(readContracts, "Loogies", "Transfer", localProvider, 1);
   console.log("📟 Loogie Transfer events:", loogieTransferEvents);
 
-  const loogieTankTransferEvents = useEventListener(readContracts, "LoogieTank", "Transfer", localProvider, 1);
-  console.log("📟 Loogie Tank Transfer events:", loogieTankTransferEvents);
+/*   const loogieTankTransferEvents = useEventListener(readContracts, "LoogieTank", "Transfer", localProvider, 1);
+  console.log("📟 Loogie Tank Transfer events:", loogieTankTransferEvents); */
 
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
@@ -267,7 +269,7 @@ function App(props) {
   const yourLoogieBalance = loogieBalance && loogieBalance.toNumber && loogieBalance.toNumber();
   const [yourLoogies, setYourLoogies] = useState();
 
-  const yourLoogieTankBalance = loogieTankBalance && loogieTankBalance.toNumber && loogieTankBalance.toNumber();
+  /* const yourLoogieTankBalance = loogieTankBalance && loogieTankBalance.toNumber && loogieTankBalance.toNumber();
   const [yourLoogieTanks, setYourLoogieTanks] = useState();
 
   async function updateLoogieTanks() {
@@ -294,7 +296,7 @@ function App(props) {
       }
     }
     setYourLoogieTanks(loogieTankUpdate.reverse());
-  }
+  } */
 
   useEffect(() => {
     const updateYourCollectibles = async () => {
@@ -325,10 +327,11 @@ function App(props) {
         }
       }
       setYourLoogies(loogieUpdate.reverse());
-      updateLoogieTanks();
+/*       updateLoogieTanks(); */
     };
     updateYourCollectibles();
-  }, [address, yourLoogieBalance, yourLoogieTankBalance]);
+/*   }, [address, yourLoogieBalance, yourLoogieTankBalance]); */
+}, [address, yourLoogieBalance]);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -526,7 +529,7 @@ function App(props) {
   }*/
 
   const [transferToAddresses, setTransferToAddresses] = useState({});
-  const [transferToTankId, setTransferToTankId] = useState({});
+/*   const [transferToTankId, setTransferToTankId] = useState({}); */
 
   return (
     <div className="App">
