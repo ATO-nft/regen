@@ -4,13 +4,49 @@
 
 .ListImage {
   border: solid;
-  border-color: white;
+  /*border-color: white;*/
   border-width: 1px;
   border-radius: 10px;
   margin-bottom: 20px;
 }
+
+.PopupColor {
+  font-size: 1rem;
+  border: solid;
+  /*border-color: var(--borderlight);*/
+  border-width: 1px;
+  border-radius: 10px;
+  /*background-color:var(--primary);*/
+  /*opacity: 1.0;*/
+  /*z-index: 10;*/
+  /*position: "absolute";*/
+  width: 400px;
+  /*height: 300px;*/
+}
+
+.NoPopupColor {
+  display: none;
+}
+
+.justify-content-start {
+  display : flex;
+  justify-content: flex-start !important;
+  padding: 0;
+}
+
+.justify-content-end {
+  display : flex;
+  justify-content: flex-end !important;
+  padding: 0;
+  /*align-items : flex-end;*/
+}
+
 .justify-content-center {
   justify-content: center !important;
+}
+
+.popupFont {
+  font-size: 1rem;
 }
 
 .mt-1 {

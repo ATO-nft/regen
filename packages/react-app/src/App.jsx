@@ -4,7 +4,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from "walletlink";
 import { Alert, Button, Card, Col, Input, List, Menu, Row } from "antd";
 import "antd/dist/antd.css";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
@@ -56,7 +56,7 @@ let startApp = true;
 const targetNetwork = NETWORKS.velas; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet, velas, ...)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 const NETWORKCHECK = true;
 
 // 🛰 providers
@@ -258,7 +258,7 @@ function App(props) {
 
   // 📟 Listen for broadcast events
   const loogieTransferEvents = useEventListener(readContracts, "Loogies", "Transfer", localProvider, 1);
-  console.log("📟 Loogie Transfer events:", loogieTransferEvents);
+  if (DEBUG) console.log("📟 Loogie Transfer events:", loogieTransferEvents);
 
 /*   const loogieTankTransferEvents = useEventListener(readContracts, "LoogieTank", "Transfer", localProvider, 1);
   console.log("📟 Loogie Tank Transfer events:", loogieTankTransferEvents); */
@@ -461,11 +461,6 @@ function App(props) {
     );
   }*/
 
-  const setColor = (numForm) => {
-    // popup color
-    // modif svg pour setColorToForm
-  }
-
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
@@ -528,6 +523,95 @@ function App(props) {
     );
   }*/
 
+  
+  const [clicked, setClicked] = useState('PopupColor NoPopupColor');
+
+  let affColorPopup = false;
+  let svgNumForm = 0;
+  let svgSpeed = [3, 7, 10, 11, 13];
+  //                    FACE TOP ;          FACE BOTTOM ;         BACKGROUND ;            DISK BOTTOM ;         DISK TOP
+  let svgColor = ['#04006C', '#EE0C0E', '#04006C', '#00FFE8', '#04006C', '#2830FF' , '#04006C', '#FAEBF0', '#04006C', '#CFF0EB'];
+  // FACE TOP : #04006C #640C98 #9C005E #E1005E #D3162E #EE0C0E
+  // FACE BOTTOM : #04006C #0419D1 #00C4FF #00E6FF #00F8FF #00FFE8
+  // BACKGROUND : #04006C #2000A2 #371BA4 #1114BF #0C0E80 #2830FF
+  // DISK BOTTOM : #04006C #5647B2 #9991D1 #BBB6E0 #DDDAF0 #FAEBF0 
+  // DISK TOP : #04006C #04466C #04909A #40C2AE #6FD1C2 #CFF0EB
+  const colorsTabs = [
+    ['#04006C', '#640C98', '#9C005E', '#E1005E', '#D3162E', '#EE0C0E'],
+    ['#04006C', '#0419D1', '#00C4FF', '#00E6FF', '#00F8FF', '#00FFE8'],
+    ['#04006C', '#2000A2', '#371BA4', '#1114BF', '#0C0E80', '#2830FF'],
+    ['#04006C', '#5647B2', '#9991D1', '#BBB6E0', '#DDDAF0', '#FAEBF0'],
+    ['#04006C', '#04466C', '#04909A', '#40C2AE', '#6FD1C2', '#CFF0EB']
+  ];
+
+  let svgSetSpeed = 0;
+  let svgSetColorStart = '';
+  let svgSetColorEnd = '';
+
+  const handleChange = (svgData, e) => {
+    if (svgData == 0) {
+      svgSetSpeed = e.target.value;
+    }
+    if (svgData == 1) {
+      svgSetColorStart = e.target.value;
+    }
+    if (svgData == 2) {
+      svgSetColorEnd = e.target.value;
+    }
+  }
+
+  const inputSpeed = useRef();
+
+  const setColor = (numForm) => {
+    //alert("Clic on setColor");
+    setClicked('PopupColor');
+    svgNumForm = numForm;
+    console.log("numForm: " + numForm);
+
+    console.log("inputSpeed defaultValue: " + inputSpeed.current.defaultValue);
+    inputSpeed.current.defaultValue = svgSpeed[numForm];
+    console.log("inputSpeed defaultValue next: " + inputSpeed.current.defaultValue);
+    //useForceRender();
+    //render();
+
+    //defaultValue
+
+    //affColorPopup = true;
+    //colorPopup();
+    //setState({});
+/*
+    popupColor = (
+      <div style={{ position: "absolute", right: 100, top: 100 }} className="PopupColor">
+        <span>Popup Color</span>
+      </div>
+    );
+*/
+  }
+
+  const validColor = () => {
+    setClicked('PopupColor NoPopupColor');
+    svgSpeed[svgNumForm] = svgSetSpeed;
+    svgColor[(svgNumForm * 2)] = svgSetColorStart;
+    svgColor[(svgNumForm * 2) + 1] = svgSetColorEnd;
+  }
+
+  // modif svg pour setColorToForm
+  //console.log(this.myRef.current.getValue());
+
+
+  //colorPopup
+  function colorPopup() {
+    if (!affColorPopup) return(''); 
+    alert("colorPopup");
+      return (
+      <div style={{ position: "absolute", right: 100, top: 100, backgroundColor: '#ff0000' }} className="PopupColor">
+        <span>Popup Color</span>
+      </div>
+      );
+    affColorPopup = false;
+  }
+
+
   const [transferToAddresses, setTransferToAddresses] = useState({});
 /*   const [transferToTankId, setTransferToTankId] = useState({}); */
 
@@ -549,6 +633,7 @@ function App(props) {
           targetNetworkColor={targetNetwork.color}
           gasPrice={gasPrice}/>
       {networkDisplay}
+
       <BrowserRouter>
         {/*
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
@@ -624,27 +709,80 @@ function App(props) {
             />
           </Route> data:image/svg+xml;base64,*/}
          <Route exact path="/mintloogies">
+
             <div style={{ maxWidth: 400, margin: "auto", paddingBottom: 10 }}>
               <div className="ListImage" style={{minHeight: 100}}>
                 <img src={createSvg()} />
               </div>
             </div>
 
+            {/*svgNumForm*/}
+            <div style={{ maxWidth: 400, margin: "auto", paddingBottom: 10 }}  className={clicked} >
+              <div style={{ paddingTop: 10, paddingBottom: 10 }}><h4>Animate Color</h4></div>
+              <div className="row" style={{marginBottom: 10}}>
+                <div className="col-6 justify-content-end" style={{ paddingRight: 10 }} ><label>Speed:</label></div>
+                <div className="col-6 justify-content-start">
+                  <input ref={inputSpeed} style={{ color: '#000', width: '50%' }} type="number" min="0" max="30" defaultValue="8" onChange={(e) => { handleChange(0, e); }} />
+                </div>
+              </div>
+
+              <div className="row style={{marginBottom: 5}}">
+                <div className="col-6 justify-content-end"><label style={{ paddingRight: 10 }} >Color Start:</label></div>
+                <div className="col-3 justify-content-start">
+                  <select style={{ color: '#000', width: '90%' }} defaultValue="0" onChange={(e) => { handleChange(1, e); }} >
+
+                    <option value={0} key={0}>
+                      {'years'}
+                    </option>
+
+                  </select>
+                  </div>
+                  <div className="col-3 justify-content-start" style={{ backgroundColor: 'blue', minWith: 50, maxWidth: 70, border: 'solid', borderWidth: '1px', borderColor: 'white' }}>&nbsp;</div>
+              </div>
+
+              <div><span>btn Color</span></div>
+              
+              <div className="row" style={{marginBottom: 20}} >
+              <div className="col-6 justify-content-end">
+              <Button style={{ marginTop: 20, marginRight: 20 }} type={"primary"} onClick={() => {
+                setClicked('PopupColor NoPopupColor')
+              }}>Cancel</Button>
+              </div>
+              <div className="col-6 justify-content-start">
+              <Button style={{ marginTop: 20, marginLeft: 20 }} type={"primary"} onClick={() => {
+                validColor()
+              }}>Valid</Button>
+              </div>
+              </div>
+
+            </div>
+            <div>
+            {/*colorPopup()*/}
+            </div>
+
+{/*
+            <div style={{ maxWidth: 400, margin: "auto", paddingBottom: 10 }}>
+              <div className="ListImage" style={{minHeight: 100}}>
+                <img src={createSvg()} />
+              </div>
+            </div>
+*/}
+
             <div style={{ maxWidth: 800, margin: "auto" }}>
               <Button style={{ marginTop: 10 }} type={"primary"} onClick={() => {
-                setColor(0)
+                setColor(2)
               }}>Background Color</Button>
               <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
-                setColor(1)
+                setColor(0)
               }}>Face Top Color</Button>
               <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
-                setColor(2)
+                setColor(1)
               }}>Face Bottom Color</Button>
               <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
-                setColor(3)
+                setColor(4)
               }}>Disk Top Color</Button>
               <Button style={{ marginLeft: 10, marginTop: 10 }} type={"primary"} onClick={() => {
-                setColor(4)
+                setColor(3)
               }}>Disk Bottom Color</Button>
             </div>
 
@@ -662,7 +800,7 @@ function App(props) {
                 renderItem={item => {
                   const id = item.id.toNumber();
 
-                  console.log("IMAGE",item.image);
+                  if (DEBUG) console.log("IMAGE",item.image);
 
                   return (
                     <div className="ListImage">
@@ -833,45 +971,6 @@ function App(props) {
         {faucetHint}
       </div> */}
 
-      {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      {/*}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://github.com/julienbrg/regen");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
-      </div>
-          */}
     </div>
   );
 }
