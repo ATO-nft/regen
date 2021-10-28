@@ -25,8 +25,8 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-//const defaultNetwork = "localhost";
-const defaultNetwork = "rinkeby";
+const defaultNetwork = "localhost";
+//const defaultNetwork = "rinkeby";
 
 const mainnetGwei = 21;
 
@@ -56,7 +56,7 @@ module.exports = {
   networks: {
     localhost: {
       url: "http://localhost:8545",
-      gas: 7000000000,
+      /*gas: 7000000000,*/
       gasPrice: 1000000000,
       /*      
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
