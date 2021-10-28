@@ -29,7 +29,7 @@ import Authereum from "authereum";
 
 // svg
 import createSvg from "./components/AlegraV3";
-import InputSpeed from "./components/InputSpeed";
+import {InputSpeed, inputSvgSpeed} from "./components/InputSpeed";
 
 const { ethers } = require("ethers");
 /*
@@ -60,9 +60,9 @@ const targetNetwork = NETWORKS.velas; // <------- select your target frontend ne
 const DEBUG = false;
 const NETWORKCHECK = true;
 
-let svgNumForm = 0;
+export let svgNumForm = 0;
 let svgSetSpeed = 0;
-let svgSpeed = [0, 0, 0, 0, 0];
+export let svgSpeed = [0, 0, 0, 0, 0];
 let svgSetColorStart = '';
 let svgSetColorEnd = '';
 //                    FACE TOP ;          FACE BOTTOM ;         BACKGROUND ;            DISK BOTTOM ;         DISK TOP
@@ -597,13 +597,15 @@ function App(props) {
     //inputRef.current.focus();
   }, [onChange]); */
 
-  const inputSpeed = useRef();
+  const inputSpeedRef = useRef();
 
   const setColor = (numForm) => {
     //alert("Clic on setColor");
     setClicked('PopupColor');
     svgNumForm = numForm;
     console.log("numForm setColor: " + numForm);
+    //InputSpeed();
+    //svgSpeed[svgNumForm] = inputSvgSpeed;
 
     //console.log("inputSpeed defaultValue: " + inputSpeed.current.defaultValue);
     //inputSpeed.current.defaultValue = svgSpeed[numForm];
@@ -628,12 +630,12 @@ function App(props) {
 
   const validColor = () => {
     setClicked('PopupColor NoPopupColor');
-    svgSpeed[svgNumForm] = svgSetSpeed;
+    svgSpeed[svgNumForm] = inputSvgSpeed;
     console.log("svgSpeed valid: ", svgSpeed);
-    svgColor[(svgNumForm * 2)] = svgSetColorStart;
-    console.log("svgColor valid: ", svgColor);
-    svgColor[(svgNumForm * 2) + 1] = svgSetColorEnd;
-    console.log("svgColor valid: ", svgColor);
+    //svgColor[(svgNumForm * 2)] = svgSetColorStart;
+    //console.log("svgColor valid: ", svgColor);
+    //svgColor[(svgNumForm * 2) + 1] = svgSetColorEnd;
+    //console.log("svgColor valid: ", svgColor);
   }
 
   // modif svg pour setColorToForm
@@ -764,7 +766,7 @@ function App(props) {
                 <div className="col-6 justify-content-end" style={{ paddingRight: 10 }} ><label>Speed:</label></div>
                 <div className="col-6 justify-content-start">
                   {/* <input ref={inputSpeed} style={{ color: '#000', width: '50%' }} type="number" min="0" max="30" defaultValue="8" onChange={(e) => { handleChange(0, e); }} /> */}
-                  <InputSpeed svgSpeed = {svgSpeed[svgNumForm]}/>
+                  <InputSpeed svgSpeed = {svgSpeed[svgNumForm]} svgNumForm={svgNumForm}/>
                   {/* <input style={{ color: '#000', width: '50%' }} type="number" name="speed" min="0" max="30" defaultValue={svgSpeed[svgNumForm]} onChange={(e) => { handleChange(0, e); }} /> */}
                 </div>
               </div>
